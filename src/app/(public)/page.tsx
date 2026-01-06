@@ -1,5 +1,7 @@
+'use client';
+
 import { Plane, Users, Wallet, Calendar } from 'lucide-react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const router = useRouter();
