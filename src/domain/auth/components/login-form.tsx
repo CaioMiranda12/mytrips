@@ -53,7 +53,7 @@ export function LoginForm() {
         nameLabelInput="email"
         namePlaceholderInput="seu@email.com"
         typeInput="text"
-        Icon={<Mail />}
+        Icon={Mail}
       />
 
       <PasswordInput
@@ -63,7 +63,7 @@ export function LoginForm() {
         nameInput="Senha"
         nameLabelInput="password"
         namePlaceholderInput="••••••••"
-        Icon={<Lock />}
+        Icon={Lock}
       />
 
       <div className="text-right">
