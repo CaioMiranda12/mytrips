@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import { IRHFProps } from "./types"
 
 export interface IInputProps extends IRHFProps {
@@ -5,6 +6,6 @@ export interface IInputProps extends IRHFProps {
   nameLabelInput: string
   typeInput: string
   namePlaceholderInput: string;
-  Icon: React.ReactNode;
+  Icon: LucideIcon;
 }
 
