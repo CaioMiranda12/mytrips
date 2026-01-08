@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { Plane, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Plane } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { LoginForm } from '@/domain/auth/components/login-form'
