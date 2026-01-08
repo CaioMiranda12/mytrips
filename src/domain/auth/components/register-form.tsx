@@ -60,7 +60,7 @@ export function RegisterForm() {
             nameLabelInput="name"
             namePlaceholderInput="Seu nome completo"
             typeInput="text"
-            Icon={<User />}
+            Icon={User}
           />
 
           <Input
@@ -71,7 +71,7 @@ export function RegisterForm() {
             nameLabelInput="email"
             namePlaceholderInput="seu@email.com"
             typeInput="text"
-            Icon={<Mail />}
+            Icon={Mail}
           />
 
           <PasswordInput
@@ -81,7 +81,7 @@ export function RegisterForm() {
             nameInput="Senha"
             nameLabelInput="password"
             namePlaceholderInput="••••••••"
-            Icon={<Lock />}
+            Icon={Lock}
           />
 
           <PasswordInput
@@ -91,7 +91,7 @@ export function RegisterForm() {
             nameInput="Confirmar senha"
             nameLabelInput="confirmPassword"
             namePlaceholderInput="••••••••"
-            Icon={<Lock />}
+            Icon={Lock}
           />
 
           <button
