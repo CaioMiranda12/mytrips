@@ -2,19 +2,10 @@
 import { useState } from 'react'
 import { Plane, ArrowLeft, Calendar, MapPin, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { CreateTripForm } from '@/domain/trip/components/create-trip-form'
 
 export default function CreateTripPage() {
   const router = useRouter()
-  const [tripName, setTripName] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
-
-  const handleCreateTrip = () => {
-    if (tripName && startDate && endDate) {
-      // Simular criação e redirecionar para a viagem
-      router.push('/trip/1')
-    }
-  }
 
   const handleCreateExample = () => {
     // Criar viagem de exemplo
@@ -53,62 +44,7 @@ export default function CreateTripPage() {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Nome da viagem
-              </label>
-              <input
-                type="text"
-                value={tripName}
-                onChange={(e) => setTripName(e.target.value)}
-                placeholder="Ex: Viagem para Gramado"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Data de início
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Data de fim
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleCreateTrip}
-              disabled={!tripName || !startDate || !endDate}
-              className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              Criar viagem
-            </button>
-          </div>
-        </div>
+        <CreateTripForm />
 
         {/* Example Trip Option */}
         <div className="mt-8 bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-200">
