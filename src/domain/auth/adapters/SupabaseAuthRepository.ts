@@ -50,6 +50,7 @@ export class SupabaseAuthRepository implements AuthRepository {
     return {
       id: data.user.id,
       email: data.user.email!,
+      name: data.user.user_metadata.full_name,
     }
   }
 }
