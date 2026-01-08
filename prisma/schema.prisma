@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Trip {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+
+  ownerId String @db.Uuid
+
+  members    TripMember[]
+  expenses   Expense[]
+  activities Activity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("trips")
+}
+
+model TripMember {
+  id String @id @default(uuid())
+
+  tripId String
+  userId String @db.Uuid
+
+  role TripRole @default(MEMBER)
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([tripId, userId])
+  @@map("trip_members")
+}
+
+enum TripRole {
+  ADMIN
+  MEMBER
+}
+
+model Expense {
+  id     String  @id @default(uuid())
+  title  String
+  amount Decimal @db.Decimal(10, 2)
+
+  tripId   String
+  paidById String @db.Uuid
+
+  category ExpenseCategory?
+  date     DateTime         @default(now())
+
+  trip         Trip                 @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  participants ExpenseParticipant[]
+
+  createdAt DateTime @default(now())
+
+  @@map("expenses")
+}
+
+enum ExpenseCategory {
+  FOOD
+  TRANSPORT
+  LODGING
+  LEISURE
+  OTHER
+}
+
+model ExpenseParticipant {
+  id String @id @default(uuid())
+
+  expenseId String
+  userId    String @db.Uuid
+
+  expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  @@unique([expenseId, userId])
+  @@map("expense_participants")
+}
+
+model Activity {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  date          DateTime
+  time          String?
+  estimatedCost Decimal? @db.Decimal(10, 2)
+
+  status ActivityStatus @default(PLANNED)
+
+  tripId String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("activities")
+}
+
+enum ActivityStatus {
+  PLANNED
+  DONE
+  CANCELED
+}
