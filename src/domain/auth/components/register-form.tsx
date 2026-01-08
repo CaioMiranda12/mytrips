@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 
 export function RegisterForm() {
   const { signUp } = useAuthContext()
+  const [loading, setLoading] = useState(false)
 
   const {
     handleSubmit,
@@ -24,7 +25,9 @@ export function RegisterForm() {
 
   const onSubmit = async (formData: RegisterSchemaType) => {
     const { name, email, password, confirmPassword } = formData;
-    console.log(formData)
+
+    if (loading) return
+    setLoading(true)
 
     try {
       await signUp(email, password)
@@ -38,17 +41,17 @@ export function RegisterForm() {
       } else {
         toast.error('Erro inesperado')
       }
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <>
-      {/* Card de cadastro */}
       <div className="bg-white rounded-2xl shadow-xl p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Criar conta</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-          {/* Nome */}
           <Input
             name="name"
             control={control}
@@ -60,7 +63,6 @@ export function RegisterForm() {
             Icon={<User />}
           />
 
-          {/* Email */}
           <Input
             name="email"
             control={control}
@@ -72,7 +74,6 @@ export function RegisterForm() {
             Icon={<Mail />}
           />
 
-          {/* Senha */}
           <PasswordInput
             name="password"
             control={control}
@@ -83,7 +84,6 @@ export function RegisterForm() {
             Icon={<Lock />}
           />
 
-          {/* Confirmar senha */}
           <PasswordInput
             name="confirmPassword"
             control={control}
@@ -94,7 +94,6 @@ export function RegisterForm() {
             Icon={<Lock />}
           />
 
-          {/* Botão cadastrar */}
           <button
             type="submit"
             className="w-full py-3 bg-linear-to-r from-cyan-500 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
@@ -103,7 +102,6 @@ export function RegisterForm() {
           </button>
         </form>
 
-        {/* Link para login */}
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Já tem uma conta?{' '}
