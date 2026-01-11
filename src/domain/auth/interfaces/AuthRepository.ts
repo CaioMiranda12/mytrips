@@ -1,8 +1,18 @@
-import { AuthUser } from '../entities/AuthUser'
+import { AuthUser } from "../entities/AuthUser"
 
 export interface AuthRepository {
-  signInWithEmail(email: string, password: string): Promise<void>
-  signUpWithEmail(email: string, password: string): Promise<void>
-  signOut(): Promise<void>
-  getCurrentUser(): Promise<AuthUser | null>
+  signUpWithEmail(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<AuthUser>
+
+  signInWithEmail(
+    email: string,
+    password: string
+  ): Promise<AuthUser>
+
+  getUserById(userId: string): Promise<AuthUser | null>
+
+
 }

@@ -1,9 +1,14 @@
-import { AuthRepository } from '../interfaces/AuthRepository'
+import { AuthRepository } from "../interfaces/AuthRepository"
+import { AuthUser } from "../entities/AuthUser"
 
 export class SignUpWithEmail {
   constructor(private repo: AuthRepository) { }
 
-  execute(email: string, password: string) {
-    return this.repo.signUpWithEmail(email, password)
+  async execute(
+    email: string,
+    password: string,
+    name: string
+  ): Promise<AuthUser> {
+    return this.repo.signUpWithEmail(email, password, name)
   }
 }

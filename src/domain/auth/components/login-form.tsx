@@ -30,6 +30,8 @@ export function LoginForm() {
 
     try {
       await signIn(email, password)
+
+      router.refresh()
       router.push('/dashboard')
 
     } catch (error) {

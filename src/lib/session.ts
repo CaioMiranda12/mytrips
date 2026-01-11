@@ -1,11 +1,11 @@
+// src/lib/session.ts
 import { cookies } from "next/headers"
 
-const SESSION_KEY = "session"
+export const SESSION_KEY = "session"
 
 export async function createSession(userId: string) {
-  const cookieStore = await cookies()
-
-  cookieStore.set(SESSION_KEY, userId, {
+  const store = await cookies()
+  store.set(SESSION_KEY, userId, {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
@@ -14,11 +14,11 @@ export async function createSession(userId: string) {
 }
 
 export async function destroySession() {
-  const cookieStore = await cookies()
-  cookieStore.delete(SESSION_KEY)
+  const store = await cookies()
+  store.delete(SESSION_KEY)
 }
 
 export async function getSessionUserId(): Promise<string | null> {
-  const cookieStore = await cookies()
-  return cookieStore.get(SESSION_KEY)?.value ?? null
+  const store = await cookies()
+  return store.get(SESSION_KEY)?.value ?? null
 }

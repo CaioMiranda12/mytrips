@@ -30,7 +30,7 @@ export function RegisterForm() {
     setLoading(true)
 
     try {
-      await signUp(email, password)
+      await signUp(email, password, name)
       toast.success('Conta criada com sucesso!')
       resetForm();
       clearErrors();
