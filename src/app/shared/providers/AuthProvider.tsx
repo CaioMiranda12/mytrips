@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import {
   createContext,
@@ -6,14 +6,15 @@ import {
   useEffect,
   useState,
   ReactNode,
-} from 'react'
+} from "react"
 
-import { AuthUser } from '@/domain/auth/entities/AuthUser'
-import { SupabaseAuthRepository } from '@/domain/auth/adapters/SupabaseAuthRepository'
-import { SignInWithEmail } from '@/domain/auth/use-cases/SignInWithEmail'
-import { SignUpWithEmail } from '@/domain/auth/use-cases/SignUpWithEmail'
-import { SignOut } from '@/domain/auth/use-cases/SignOut'
-import { GetCurrentUser } from '@/domain/auth/use-cases/GetCurrentUser'
+import { AuthUser } from "@/domain/auth/entities/AuthUser"
+import {
+  signInAction,
+  signUpAction,
+  signOutAction,
+  getCurrentUserAction,
+} from "@/actions/auth.actions"
 
 type AuthContextType = {
   user: AuthUser | null
@@ -25,15 +26,13 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
-const repo = new SupabaseAuthRepository()
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadUser = async () => {
-      const currentUser = await new GetCurrentUser(repo).execute()
+      const currentUser = await getCurrentUserAction()
       setUser(currentUser)
       setLoading(false)
     }
@@ -41,17 +40,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    await new SignInWithEmail(repo).execute(email, password)
-    setUser(await new GetCurrentUser(repo).execute())
+    await signInAction(email, password)
+    setUser(await getCurrentUserAction())
   }
 
   const signUp = async (email: string, password: string) => {
-    await new SignUpWithEmail(repo).execute(email, password)
-    setUser(await new GetCurrentUser(repo).execute())
+    await signUpAction(email, password)
+    setUser(await getCurrentUserAction())
   }
 
   const signOut = async () => {
-    await new SignOut(repo).execute()
+    await signOutAction()
     setUser(null)
   }
 
@@ -66,10 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuthContext() {
   const context = useContext(AuthContext)
-
   if (!context) {
-    throw new Error('useAuthContext must be used within AuthProvider')
+    throw new Error("useAuthContext must be used within AuthProvider")
   }
-
   return context
 }

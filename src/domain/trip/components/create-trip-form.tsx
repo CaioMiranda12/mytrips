@@ -4,7 +4,9 @@ import { Input } from "@/app/shared/ui/form/input"
 import { Calendar, MapPin } from "lucide-react"
 import { useState } from "react"
 import { useTripForm } from "../hooks/useTripForm"
-import { TripSchema } from "../schemas/tripSchema"
+import { TripSchema, TripSchemaType } from "../schemas/tripSchema"
+import { useTrips } from "../hooks/useTrips"
+import { toast } from "react-toastify"
 
 export function CreateTripForm() {
   const {
@@ -22,8 +24,23 @@ export function CreateTripForm() {
   const startDate = watch('startDate')
   const endDate = watch('endDate')
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const { createTrip } = useTrips()
+
+
+  const onSubmit = async (formData: TripSchemaType) => {
+    try {
+      const trip = await createTrip({
+        title: formData.title,
+        description: formData.description,
+        startDate: new Date(formData.startDate),
+        endDate: new Date(formData.endDate),
+      })
+      console.log(trip)
+      toast.success('Viagem criada com sucesso!')
+    } catch (error) {
+      console.log(error)
+      toast.error('Erro ao criar a viagem. Tente novamente.')
+    }
   }
 
   const handleCreateTrip = () => {

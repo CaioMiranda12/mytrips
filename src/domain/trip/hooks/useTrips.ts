@@ -5,18 +5,26 @@ import { PrismaTripRepository } from '../adapters/PrismaTripRepository'
 import { CreateTrip } from '../use-cases/CreateTrip'
 import { GetUserTrips } from '../use-cases/GetUserTrips'
 import { Trip } from '../entities/Trip'
+import { useAuthContext } from '@/app/shared/providers/AuthProvider'
 
-const repo = new PrismaTripRepository()
+export function useTrips() {
+  const { user } = useAuthContext()
 
-export function useTrips(userId: string) {
   const [trips, setTrips] = useState<Trip[]>([])
   const [loading, setLoading] = useState(false)
 
   const loadTrips = async () => {
+    if (!user) return
+
     setLoading(true)
-    const data = await new GetUserTrips(repo).execute(userId)
-    setTrips(data)
-    setLoading(false)
+
+    try {
+      const repo = new PrismaTripRepository()
+      const data = await new GetUserTrips(repo).execute(user.id)
+      setTrips(data)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const createTrip = async (input: {
@@ -25,9 +33,14 @@ export function useTrips(userId: string) {
     startDate: Date
     endDate: Date
   }) => {
+    if (!user) {
+      throw new Error('Usuário não autenticado')
+    }
+
+    const repo = new PrismaTripRepository()
     const trip = await new CreateTrip(repo).execute({
       ...input,
-      ownerId: userId,
+      ownerId: user.id,
     })
 
     setTrips((prev) => [...prev, trip])
