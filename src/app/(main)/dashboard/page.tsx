@@ -1,6 +1,7 @@
 'use client'
 import { useAuthContext } from '@/app/shared/providers/AuthProvider'
 import { useUserTrips } from '@/domain/trip/hooks/useUserTrips'
+import { formatDate } from '@/lib/formatDate'
 import { Plane, Plus, Users, Calendar, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -29,10 +30,6 @@ export default function Dashboard() {
   // ]
 
   const { trips, loading } = useUserTrips()
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50">
