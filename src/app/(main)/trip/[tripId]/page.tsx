@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, MapPin, DollarSign, Clock } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
+import { formatDate } from '@/lib/formatDate'
 
 // interface TripPageProps {
 //   params: {
@@ -50,18 +51,6 @@ export default function TripDetails() {
     navigator.clipboard.writeText('https://familytripplanner.com/join/abc123')
     setLinkCopied(true)
     setTimeout(() => setLinkCopied(false), 2000)
-  }
-
-  function formatDate(date: Date | string) {
-    const parsedDate = typeof date === 'string'
-      ? new Date(date)
-      : date
-
-    return parsedDate.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    })
   }
 
 
