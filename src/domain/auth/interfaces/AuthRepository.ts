@@ -13,6 +13,4 @@ export interface AuthRepository {
   ): Promise<AuthUser>
 
   getUserById(userId: string): Promise<AuthUser | null>
-
-
 }

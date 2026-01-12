@@ -1,18 +1,13 @@
-import { TripRepository, CreateTripInput } from '../interfaces/TripRepository'
-import { Trip } from '../entities/Trip'
-
+import { CreateTripDTO } from "../dtos/CreateTripDTO"
+import { TripRepository } from "../interfaces/TripRepository"
 export class CreateTrip {
-  constructor(private tripRepo: TripRepository) { }
+  constructor(private repo: TripRepository) { }
 
-  async execute(input: CreateTripInput): Promise<Trip> {
-    if (input.startDate > input.endDate) {
+  async execute(data: CreateTripDTO) {
+    if (data.startDate > data.endDate) {
       throw new Error('Data inicial não pode ser maior que a final')
     }
 
-    const trip = await this.tripRepo.createTrip(input)
-
-    await this.tripRepo.addMember(trip.id, input.ownerId, 'ADMIN')
-
-    return trip
+    return this.repo.createTrip(data)
   }
 }

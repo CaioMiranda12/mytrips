@@ -43,13 +43,6 @@ export function CreateTripForm() {
     }
   }
 
-  const handleCreateTrip = () => {
-    // if (tripName && startDate && endDate) {
-    //   // Simular criação e redirecionar para a viagem
-    //   router.push('/trip/1')
-    // }
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" noValidate>
       <div className="space-y-6">
@@ -100,7 +93,7 @@ export function CreateTripForm() {
         </div>
 
         <button
-          onClick={handleCreateTrip}
+          type="submit"
           disabled={!tripName || !description || !startDate || !endDate}
           className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >

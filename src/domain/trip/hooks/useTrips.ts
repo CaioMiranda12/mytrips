@@ -6,6 +6,7 @@ import { CreateTrip } from '../use-cases/CreateTrip'
 import { GetUserTrips } from '../use-cases/GetUserTrips'
 import { Trip } from '../entities/Trip'
 import { useAuthContext } from '@/app/shared/providers/AuthProvider'
+import { createTripAction, getUserTripsAction } from '@/actions/trip.actions'
 
 export function useTrips() {
   const { user } = useAuthContext()
@@ -19,8 +20,7 @@ export function useTrips() {
     setLoading(true)
 
     try {
-      const repo = new PrismaTripRepository()
-      const data = await new GetUserTrips(repo).execute(user.id)
+      const data = await getUserTripsAction(user.id)
       setTrips(data)
     } finally {
       setLoading(false)
@@ -37,8 +37,7 @@ export function useTrips() {
       throw new Error('Usuário não autenticado')
     }
 
-    const repo = new PrismaTripRepository()
-    const trip = await new CreateTrip(repo).execute({
+    const trip = await createTripAction({
       ...input,
       ownerId: user.id,
     })

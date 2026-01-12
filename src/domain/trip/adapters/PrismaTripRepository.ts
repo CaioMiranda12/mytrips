@@ -1,9 +1,10 @@
 import { prisma } from '@/lib/prisma'
-import { TripRepository, CreateTripInput } from '../interfaces/TripRepository'
-import { Trip } from '../entities/Trip'
 
+import { Trip } from '@/domain/trip/entities/Trip'
+import { CreateTripDTO } from '../dtos/CreateTripDTO'
+import { TripRepository } from '../interfaces/TripRepository'
 export class PrismaTripRepository implements TripRepository {
-  async createTrip(data: CreateTripInput): Promise<Trip> {
+  async createTrip(data: CreateTripDTO): Promise<Trip> {
     const trip = await prisma.trip.create({
       data: {
         title: data.title,
@@ -11,56 +12,78 @@ export class PrismaTripRepository implements TripRepository {
         startDate: data.startDate,
         endDate: data.endDate,
         ownerId: data.ownerId,
+        members: {
+          create: {
+            userId: data.ownerId,
+            role: 'ADMIN',
+          },
+        },
       },
       include: {
         members: true,
       },
     })
 
-    return trip
-  }
-
-  async addMember(tripId: string, userId: string, role: 'ADMIN' | 'MEMBER') {
-    await prisma.tripMember.create({
-      data: {
-        tripId,
-        userId,
-        role,
-      },
-    })
+    return {
+      id: trip.id,
+      title: trip.title,
+      description: trip.description ?? undefined,
+      startDate: trip.startDate,
+      endDate: trip.endDate,
+      ownerId: trip.ownerId,
+      createdAt: trip.createdAt,
+      members: trip.members.map(m => ({
+        userId: m.userId,
+        role: m.role,
+      })),
+    }
   }
 
   async getTripsByUser(userId: string): Promise<Trip[]> {
-    return prisma.trip.findMany({
+    const trips = await prisma.trip.findMany({
       where: {
         members: {
-          some: {
-            userId,
-          },
+          some: { userId },
         },
       },
-      include: {
-        members: true,
-      },
-      orderBy: {
-        startDate: 'asc',
-      },
+      include: { members: true },
     })
+
+    return trips.map(trip => ({
+      id: trip.id,
+      title: trip.title,
+      description: trip.description ?? undefined,
+      startDate: trip.startDate,
+      endDate: trip.endDate,
+      ownerId: trip.ownerId,
+      createdAt: trip.createdAt,
+      members: trip.members.map(m => ({
+        userId: m.userId,
+        role: m.role,
+      })),
+    }))
   }
 
-  async getTripById(tripId: string, userId: string): Promise<Trip | null> {
-    return prisma.trip.findFirst({
-      where: {
-        id: tripId,
-        members: {
-          some: {
-            userId,
-          },
-        },
-      },
-      include: {
-        members: true,
-      },
+  async getTripById(tripId: string): Promise<Trip | null> {
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: { members: true },
     })
+
+    if (!trip) return null
+
+    return {
+      id: trip.id,
+      title: trip.title,
+      description: trip.description ?? undefined,
+      startDate: trip.startDate,
+      endDate: trip.endDate,
+      ownerId: trip.ownerId,
+      createdAt: trip.createdAt,
+      members: trip.members.map(m => ({
+        userId: m.userId,
+        role: m.role,
+      })),
+    }
   }
 }

@@ -8,7 +8,7 @@ export type TripMember = {
 export type Trip = {
   id: string
   title: string
-  description?: string | null
+  description?: string
   startDate: Date
   endDate: Date
   ownerId: string
