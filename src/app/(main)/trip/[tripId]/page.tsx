@@ -4,12 +4,8 @@ import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, Ma
 import { useParams, useRouter } from 'next/navigation'
 import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
 import { formatDate } from '@/lib/formatDate'
-
-// interface TripPageProps {
-//   params: {
-//     id: string;
-//   }
-// }
+import { CreateExpenseModal } from '@/domain/trip/components/create-expense-modal'
+import { formatCurrency } from '@/lib/formatCurrency'
 
 export default function TripDetails() {
   const router = useRouter()
@@ -29,6 +25,7 @@ export default function TripDetails() {
   // }
 
   const { trip, loading } = useTripDetails(tripId)
+  console.log(trip)
 
   if (!trip) return;
 
@@ -51,11 +48,6 @@ export default function TripDetails() {
     navigator.clipboard.writeText('https://familytripplanner.com/join/abc123')
     setLinkCopied(true)
     setTimeout(() => setLinkCopied(false), 2000)
-  }
-
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount)
   }
 
   return (
@@ -276,13 +268,14 @@ export default function TripDetails() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-6">
+              {/* <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800">Lista de gastos</h2>
                 <button className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-lg hover:shadow-md transition-all flex items-center gap-2">
                   <Plus className="w-4 h-4" />
                   <span>Adicionar gasto</span>
                 </button>
-              </div>
+              </div> */}
+              <CreateExpenseModal trip={trip} />
 
               <div className="space-y-3">
                 {expenses.map((expense) => (
