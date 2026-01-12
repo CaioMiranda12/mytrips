@@ -4,17 +4,19 @@ import { Trip } from '@/domain/trip/entities/Trip'
 import { CreateTripDTO } from '../dtos/CreateTripDTO'
 import { TripRepository } from '../interfaces/TripRepository'
 export class PrismaTripRepository implements TripRepository {
-  async createTrip(data: CreateTripDTO): Promise<Trip> {
+  async createTrip(tripData: CreateTripDTO): Promise<Trip> {
+    const { title, description, startDate, endDate, ownerId } = tripData;
+
     const trip = await prisma.trip.create({
       data: {
-        title: data.title,
-        description: data.description,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        ownerId: data.ownerId,
+        title: title,
+        description: description,
+        startDate: startDate,
+        endDate: endDate,
+        ownerId: ownerId,
         members: {
           create: {
-            userId: data.ownerId,
+            userId: ownerId,
             role: 'ADMIN',
           },
         },
@@ -32,9 +34,9 @@ export class PrismaTripRepository implements TripRepository {
       endDate: trip.endDate,
       ownerId: trip.ownerId,
       createdAt: trip.createdAt,
-      members: trip.members.map(m => ({
-        userId: m.userId,
-        role: m.role,
+      members: trip.members.map(member => ({
+        userId: member.userId,
+        role: member.role,
       })),
     }
   }
@@ -57,9 +59,9 @@ export class PrismaTripRepository implements TripRepository {
       endDate: trip.endDate,
       ownerId: trip.ownerId,
       createdAt: trip.createdAt,
-      members: trip.members.map(m => ({
-        userId: m.userId,
-        role: m.role,
+      members: trip.members.map(member => ({
+        userId: member.userId,
+        role: member.role,
       })),
     }))
   }
@@ -80,9 +82,9 @@ export class PrismaTripRepository implements TripRepository {
       endDate: trip.endDate,
       ownerId: trip.ownerId,
       createdAt: trip.createdAt,
-      members: trip.members.map(m => ({
-        userId: m.userId,
-        role: m.role,
+      members: trip.members.map(member => ({
+        userId: member.userId,
+        role: member.role,
       })),
     }
   }
