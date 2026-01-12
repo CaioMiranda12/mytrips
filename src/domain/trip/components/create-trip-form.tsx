@@ -7,8 +7,11 @@ import { useTripForm } from "../hooks/useTripForm"
 import { TripSchema, TripSchemaType } from "../schemas/tripSchema"
 import { useTrips } from "../hooks/useTrips"
 import { toast } from "react-toastify"
+import { useRouter } from "next/navigation"
 
 export function CreateTripForm() {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -26,7 +29,6 @@ export function CreateTripForm() {
 
   const { createTrip } = useTrips()
 
-
   const onSubmit = async (formData: TripSchemaType) => {
     try {
       const trip = await createTrip({
@@ -35,8 +37,8 @@ export function CreateTripForm() {
         startDate: new Date(formData.startDate),
         endDate: new Date(formData.endDate),
       })
-      console.log(trip)
       toast.success('Viagem criada com sucesso!')
+      router.push(`/trip/${trip.id}`)
     } catch (error) {
       console.log(error)
       toast.error('Erro ao criar a viagem. Tente novamente.')
