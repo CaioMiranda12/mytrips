@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Trip } from '../entities/Trip'
 import { getTripDetailsAction } from '@/actions/trip.actions'
+import { TripDetailsView } from '../views/TripDetailsView'
 
 export function useTripDetails(tripId: string) {
-  const [trip, setTrip] = useState<Trip | null>(null)
+  const [trip, setTrip] = useState<TripDetailsView | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

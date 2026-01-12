@@ -8,8 +8,7 @@ export default function CreateTripPage() {
   const router = useRouter()
 
   const handleCreateExample = () => {
-    // Criar viagem de exemplo
-    router.push('/trip/1')
+    router.push('/trip/fake-trip')
   }
 
   return (

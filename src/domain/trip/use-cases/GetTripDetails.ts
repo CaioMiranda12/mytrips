@@ -1,11 +1,11 @@
-import { Trip } from '../entities/Trip'
 import { TripRepository } from '../interfaces/TripRepository'
 import { GetTripByIdDTO } from '../dtos/GetTripByIdDTO'
+import { TripDetailsView } from '../views/TripDetailsView'
 
 export class GetTripDetails {
   constructor(private tripRepository: TripRepository) { }
 
-  async execute({ tripId }: GetTripByIdDTO): Promise<Trip> {
+  async execute({ tripId }: GetTripByIdDTO): Promise<TripDetailsView> {
     const findTrip = await this.tripRepository.getTripById(tripId)
 
     if (!findTrip) {

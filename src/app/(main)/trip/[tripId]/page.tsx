@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, MapPin, DollarSign, Clock } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
+import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
 
 // interface TripPageProps {
 //   params: {
@@ -18,35 +19,17 @@ export default function TripDetails() {
 
   const { tripId } = useParams<{ tripId: string }>()
 
-  // Estados do formulário de gastos
-  const [expenseForm, setExpenseForm] = useState({
-    description: '',
-    amount: '',
-    paidBy: '',
-    date: ''
-  })
-
-  // Estados do formulário de passeios
-  const [activityForm, setActivityForm] = useState({
-    name: '',
-    date: '',
-    status: 'planned' as 'planned' | 'confirmed'
-  })
-
   // Dados fictícios
-  const trip = {
-    name: 'Viagem para Gramado',
-    startDate: '2024-07-15',
-    endDate: '2024-07-22',
-    location: 'Gramado, RS'
-  }
+  // const trip = {
+  //   name: 'Viagem para Gramado',
+  //   startDate: '2024-07-15',
+  //   endDate: '2024-07-22',
+  //   location: 'Gramado, RS'
+  // }
 
-  const members = [
-    { id: '1', name: 'João Silva', role: 'admin', avatar: 'J' },
-    { id: '2', name: 'Maria Santos', role: 'member', avatar: 'M' },
-    { id: '3', name: 'Pedro Costa', role: 'member', avatar: 'P' },
-    { id: '4', name: 'Ana Oliveira', role: 'member', avatar: 'A' },
-  ]
+  const { trip, loading } = useTripDetails(tripId)
+
+  if (!trip) return;
 
   const expenses = [
     { id: '1', description: 'Hotel 3 noites', amount: 1200, paidBy: 'João Silva', date: '2024-07-15' },
@@ -61,7 +44,7 @@ export default function TripDetails() {
   ]
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
-  const perPerson = totalExpenses / members.length
+  const perPerson = totalExpenses / trip.members.length
 
   const copyInviteLink = () => {
     navigator.clipboard.writeText('https://familytripplanner.com/join/abc123')
@@ -69,9 +52,18 @@ export default function TripDetails() {
     setTimeout(() => setLinkCopied(false), 2000)
   }
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+  function formatDate(date: Date | string) {
+    const parsedDate = typeof date === 'string'
+      ? new Date(date)
+      : date
+
+    return parsedDate.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })
   }
+
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount)
@@ -95,7 +87,7 @@ export default function TripDetails() {
                   <Plane className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-800">{trip.name}</h1>
+                  <h1 className="text-xl font-bold text-gray-800">{trip.title}</h1>
                   <p className="text-sm text-gray-600">{trip.location}</p>
                 </div>
               </div>
@@ -176,7 +168,7 @@ export default function TripDetails() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Participantes</p>
-                    <p className="font-semibold text-gray-800">{members.length} pessoas</p>
+                    <p className="font-semibold text-gray-800">{trip.members.length} pessoas</p>
                   </div>
                 </div>
               </div>
@@ -243,25 +235,25 @@ export default function TripDetails() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Participantes ({members.length})</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Participantes ({trip.members.length})</h2>
               <div className="space-y-3">
-                {members.map((member) => (
+                {trip.members.map((member) => (
                   <div
-                    key={member.id}
+                    key={member.userId}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">{member.avatar}</span>
+                        <span className="text-white font-bold text-lg">{member.name.charAt(0)}</span>
                       </div>
                       <div>
                         <p className="font-semibold text-gray-800">{member.name}</p>
                         <p className="text-sm text-gray-500">
-                          {member.role === 'admin' ? 'Administrador' : 'Participante'}
+                          {member.role === 'ADMIN' ? 'Administrador' : 'Participante'}
                         </p>
                       </div>
                     </div>
-                    {member.role === 'admin' && (
+                    {member.role === 'ADMIN' && (
                       <span className="px-3 py-1 bg-cyan-100 text-cyan-700 text-xs font-medium rounded-full">
                         Admin
                       </span>

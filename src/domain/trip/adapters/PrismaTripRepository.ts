@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { Trip } from '@/domain/trip/entities/Trip'
 import { CreateTripDTO } from '../dtos/CreateTripDTO'
 import { TripRepository } from '../interfaces/TripRepository'
+import { TripDetailsView } from '../views/TripDetailsView';
 export class PrismaTripRepository implements TripRepository {
   async createTrip(tripData: CreateTripDTO): Promise<Trip> {
     const { title, description, startDate, endDate, ownerId, location } = tripData;
@@ -69,10 +70,21 @@ export class PrismaTripRepository implements TripRepository {
     }))
   }
 
-  async getTripById(tripId: string): Promise<Trip | null> {
+  async getTripById(tripId: string): Promise<TripDetailsView | null> {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
-      include: { members: true },
+      include: {
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        }
+      },
     })
 
     if (!trip) return null
@@ -89,6 +101,7 @@ export class PrismaTripRepository implements TripRepository {
       members: trip.members.map(member => ({
         userId: member.userId,
         role: member.role,
+        name: member.user.name,
       })),
     }
   }

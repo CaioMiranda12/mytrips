@@ -1,18 +1,18 @@
 export type TripRole = 'ADMIN' | 'MEMBER'
 
 export type TripMember = {
-  userId: string
-  role: TripRole
+  userId: string;
+  role: TripRole;
 }
 
 export type Trip = {
-  id: string
-  title: string
-  description?: string
+  id: string;
+  title: string;
+  description?: string;
   location: string;
-  startDate: Date
-  endDate: Date
-  ownerId: string
-  members: TripMember[]
-  createdAt: Date
+  startDate: Date;
+  endDate: Date;
+  ownerId: string;
+  members: TripMember[];
+  createdAt: Date;
 }
