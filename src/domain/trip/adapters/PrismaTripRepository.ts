@@ -83,7 +83,9 @@ export class PrismaTripRepository implements TripRepository {
               }
             }
           }
-        }
+        },
+        activities: true,
+        expenses: true
       },
     })
 
