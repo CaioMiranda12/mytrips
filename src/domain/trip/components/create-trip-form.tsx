@@ -61,6 +61,17 @@ export function CreateTripForm() {
         />
 
         <Input
+          name="location"
+          control={control}
+          errors={errors}
+          nameInput="Localização da viagem"
+          nameLabelInput="location"
+          namePlaceholderInput="Ex: Fortaleza, CE"
+          typeInput="text"
+          Icon={MapPin}
+        />
+
+        <Input
           name="description"
           control={control}
           errors={errors}
@@ -97,7 +108,7 @@ export function CreateTripForm() {
 
         <button
           type="submit"
-          disabled={!tripName || !description || !startDate || !endDate}
+          disabled={!tripName || !startDate || !endDate}
           className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           Criar viagem
