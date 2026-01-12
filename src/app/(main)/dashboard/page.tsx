@@ -9,26 +9,26 @@ export default function Dashboard() {
   const { user } = useAuthContext()
   console.log(user)
 
-  const trips = [
-    {
-      id: '1',
-      name: 'Viagem para Gramado',
-      startDate: '2024-07-15',
-      endDate: '2024-07-22',
-      participants: 5,
-      location: 'Gramado, RS'
-    },
-    {
-      id: '2',
-      name: 'Férias em Florianópolis',
-      startDate: '2024-08-10',
-      endDate: '2024-08-17',
-      participants: 3,
-      location: 'Florianópolis, SC'
-    }
-  ]
+  // const trips = [
+  //   {
+  //     id: '1',
+  //     name: 'Viagem para Gramado',
+  //     startDate: '2024-07-15',
+  //     endDate: '2024-07-22',
+  //     participants: 5,
+  //     location: 'Gramado, RS'
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Férias em Florianópolis',
+  //     startDate: '2024-08-10',
+  //     endDate: '2024-08-17',
+  //     participants: 3,
+  //     location: 'Florianópolis, SC'
+  //   }
+  // ]
 
-  // const { trips, loading } = useUserTrips()
+  const { trips, loading } = useUserTrips()
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
@@ -90,7 +90,7 @@ export default function Dashboard() {
               </div>
 
               <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-cyan-600 transition-colors">
-                {trip.name}
+                {trip.title}
               </h3>
 
               <div className="space-y-2 mb-4">
@@ -102,7 +102,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Users className="w-4 h-4" />
-                  <span className="text-sm">{trip.participants} participantes</span>
+                  <span className="text-sm">{trip.members.length} participantes</span>
                 </div>
               </div>
 
