@@ -33,6 +33,7 @@ model Trip {
   description String?
   startDate   DateTime
   endDate     DateTime
+  location    String
 
   ownerId String @db.Uuid
   owner   User   @relation("TripOwner", fields: [ownerId], references: [id])

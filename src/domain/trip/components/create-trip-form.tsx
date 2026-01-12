@@ -5,9 +5,9 @@ import { Calendar, MapPin } from "lucide-react"
 import { useState } from "react"
 import { useTripForm } from "../hooks/useTripForm"
 import { TripSchema, TripSchemaType } from "../schemas/tripSchema"
-import { useTrips } from "../hooks/useTrips"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
+import { useCreateTrip } from "../hooks/useCreateTrip"
 
 export function CreateTripForm() {
   const router = useRouter()
@@ -27,13 +27,14 @@ export function CreateTripForm() {
   const startDate = watch('startDate')
   const endDate = watch('endDate')
 
-  const { createTrip } = useTrips()
+  const { createTrip } = useCreateTrip()
 
   const onSubmit = async (formData: TripSchemaType) => {
     try {
       const trip = await createTrip({
         title: formData.title,
         description: formData.description,
+        location: formData.location,
         startDate: new Date(formData.startDate),
         endDate: new Date(formData.endDate),
       })

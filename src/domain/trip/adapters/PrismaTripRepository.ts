@@ -5,12 +5,13 @@ import { CreateTripDTO } from '../dtos/CreateTripDTO'
 import { TripRepository } from '../interfaces/TripRepository'
 export class PrismaTripRepository implements TripRepository {
   async createTrip(tripData: CreateTripDTO): Promise<Trip> {
-    const { title, description, startDate, endDate, ownerId } = tripData;
+    const { title, description, startDate, endDate, ownerId, location } = tripData;
 
     const trip = await prisma.trip.create({
       data: {
         title: title,
         description: description,
+        location: location,
         startDate: startDate,
         endDate: endDate,
         ownerId: ownerId,
@@ -30,6 +31,7 @@ export class PrismaTripRepository implements TripRepository {
       id: trip.id,
       title: trip.title,
       description: trip.description ?? undefined,
+      location: trip.location,
       startDate: trip.startDate,
       endDate: trip.endDate,
       ownerId: trip.ownerId,
@@ -55,6 +57,7 @@ export class PrismaTripRepository implements TripRepository {
       id: trip.id,
       title: trip.title,
       description: trip.description ?? undefined,
+      location: trip.location,
       startDate: trip.startDate,
       endDate: trip.endDate,
       ownerId: trip.ownerId,
@@ -78,6 +81,7 @@ export class PrismaTripRepository implements TripRepository {
       id: trip.id,
       title: trip.title,
       description: trip.description ?? undefined,
+      location: trip.location,
       startDate: trip.startDate,
       endDate: trip.endDate,
       ownerId: trip.ownerId,

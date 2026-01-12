@@ -1,20 +1,22 @@
 'use client'
 import { useState } from 'react'
 import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, MapPin, DollarSign, Clock } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
-interface TripPageProps {
-  params: {
-    id: string;
-  }
-}
+// interface TripPageProps {
+//   params: {
+//     id: string;
+//   }
+// }
 
-export default function TripDetails({ params }: TripPageProps) {
+export default function TripDetails() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'expenses' | 'activities'>('overview')
   const [linkCopied, setLinkCopied] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   const [showActivityModal, setShowActivityModal] = useState(false)
+
+  const { tripId } = useParams<{ tripId: string }>()
 
   // Estados do formulário de gastos
   const [expenseForm, setExpenseForm] = useState({

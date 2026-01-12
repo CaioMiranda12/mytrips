@@ -16,6 +16,7 @@ export const useTripForm = (schema: typeof TripSchema) => {
     defaultValues: {
       title: "",
       description: "",
+      location: "",
       startDate: "",
       endDate: "",
     }
