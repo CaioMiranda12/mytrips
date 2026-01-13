@@ -1,6 +1,6 @@
 'use client'
 
-import { Input } from "@/app/shared/ui/form/input"
+import { InputField } from "@/app/shared/ui/form/InputField"
 import { Calendar, MapPin } from "lucide-react"
 import { useState } from "react"
 import { useTripForm } from "../hooks/useTripForm"
@@ -49,60 +49,59 @@ export function CreateTripForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" noValidate>
       <div className="space-y-6">
-        <Input
+        <InputField
           name="title"
           control={control}
           errors={errors}
-          nameInput="Nome da viagem"
-          nameLabelInput="title"
-          namePlaceholderInput="Ex: Viagem para Gramado"
+          label="Nome da viagem"
+          placeholder="Ex: Viagem para Gramado"
           typeInput="text"
           Icon={MapPin}
+          required
         />
 
-        <Input
+        <InputField
           name="location"
           control={control}
           errors={errors}
-          nameInput="Localização da viagem"
-          nameLabelInput="location"
-          namePlaceholderInput="Ex: Fortaleza, CE"
+          label="Localização da viagem"
+          placeholder="Ex: Fortaleza, CE"
           typeInput="text"
           Icon={MapPin}
+          required
         />
 
-        <Input
+        <InputField
           name="description"
           control={control}
           errors={errors}
-          nameInput="Descrição da viagem"
-          nameLabelInput="description"
-          namePlaceholderInput="Conte mais sobre sua viagem"
+          label="Descrição da viagem"
+          placeholder="Conte mais sobre sua viagem"
           typeInput="text"
           Icon={MapPin}
         />
 
         <div className="grid md:grid-cols-2 gap-4">
-          <Input
+          <InputField
             name="startDate"
             control={control}
             errors={errors}
-            nameInput="Data de início"
-            nameLabelInput="startDate"
-            namePlaceholderInput="Selecione a data de início"
+            label="Data de início"
+            placeholder="Selecione a data de início"
             typeInput="date"
             Icon={Calendar}
+            required
           />
 
-          <Input
+          <InputField
             name="endDate"
             control={control}
             errors={errors}
-            nameInput="Data de término"
-            nameLabelInput="endDate"
-            namePlaceholderInput="Selecione a data de término"
+            label="Data de término"
+            placeholder="Selecione a data de término"
             typeInput="date"
             Icon={Calendar}
+            required
           />
         </div>
 
