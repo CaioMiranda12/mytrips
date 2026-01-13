@@ -4,8 +4,8 @@ import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, Ma
 import { useParams, useRouter } from 'next/navigation'
 import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
 import { formatDate } from '@/lib/formatDate'
-import { CreateExpenseModal } from '@/domain/trip/components/create-expense-modal'
 import { formatCurrency } from '@/lib/formatCurrency'
+import { CreateExpenseModalForm } from '@/domain/expense/components/create-expense-modal-form'
 
 export default function TripDetails() {
   const router = useRouter()
@@ -275,7 +275,7 @@ export default function TripDetails() {
                   <span>Adicionar gasto</span>
                 </button>
               </div> */}
-              <CreateExpenseModal trip={trip} />
+              <CreateExpenseModalForm trip={trip} />
 
               <div className="space-y-3">
                 {expenses.map((expense) => (

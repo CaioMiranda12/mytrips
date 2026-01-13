@@ -1,57 +1,77 @@
 'use client'
 
-import { Info, Plus, X } from "lucide-react"
+import { Info, MapPin, Plus, X } from "lucide-react"
 import { useState } from "react"
-import { TripDetailsView } from "../views/TripDetailsView"
 import { formatCurrency } from "@/lib/formatCurrency"
+import { TripDetailsView } from "@/domain/trip/views/TripDetailsView"
+import { useExpenseForm } from "../hooks/useExpenseForm"
+import { ExpenseSchema } from "../schemas/expenseSchema"
+import { InputField } from "@/app/shared/ui/form/InputField"
+import { SelectField } from "@/app/shared/ui/form/SelectField"
 
 interface CreateExpenseModalProps {
   trip: TripDetailsView
 }
 
-export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
+export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
   const [showExpenseModal, setShowExpenseModal] = useState(false)
 
-  const [expenseForm, setExpenseForm] = useState({
-    description: '',
-    amount: '',
-    paidBy: 'João Silva',
-    splitType: 'equal' as 'equal' | 'custom',
-    participants: [] as string[],
-    category: '',
-    date: new Date().toISOString().split('T')[0]
-  })
+  const memberOptions = trip.members.map(member => ({
+    value: member.userId,
+    label: member.name
+  }));
+
+
+  // const [expenseForm, setExpenseForm] = useState({
+  //   description: '',
+  //   amount: '',
+  //   paidBy: 'João Silva',
+  //   splitType: 'equal' as 'equal' | 'custom',
+  //   participants: [] as string[],
+  //   category: '',
+  //   date: new Date().toISOString().split('T')[0]
+  // })
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    errors,
+    clearErrors
+  } = useExpenseForm(ExpenseSchema)
 
   const handleSaveExpense = () => {
     setShowExpenseModal(false)
-    setExpenseForm({
-      description: '',
-      amount: '',
-      paidBy: 'João Silva',
-      splitType: 'equal',
-      participants: [],
-      category: '',
-      date: new Date().toISOString().split('T')[0]
-    })
+    // setExpenseForm({
+    //   description: '',
+    //   amount: '',
+    //   paidBy: 'João Silva',
+    //   splitType: 'equal',
+    //   participants: [],
+    //   category: '',
+    //   date: new Date().toISOString().split('T')[0]
+    // })
   }
 
   const toggleParticipant = (memberId: string) => {
-    setExpenseForm(prev => ({
-      ...prev,
-      participants: prev.participants.includes(memberId)
-        ? prev.participants.filter(id => id !== memberId)
-        : [...prev.participants, memberId]
-    }))
+    // setExpenseForm(prev => ({
+    //   ...prev,
+    //   participants: prev.participants.includes(memberId)
+    //     ? prev.participants.filter(id => id !== memberId)
+    //     : [...prev.participants, memberId]
+    // }))
   }
 
   const calculatePerPerson = () => {
-    const amount = parseFloat(expenseForm.amount) || 0
-    if (expenseForm.splitType === 'equal') {
-      return amount / trip.members.length
-    } else {
-      const count = expenseForm.participants.length || 1
-      return amount / count
-    }
+    // const amount = parseFloat(expenseForm.amount) || 0
+    // if (expenseForm.splitType === 'equal') {
+    //   return amount / trip.members.length
+    // } else {
+    //   const count = expenseForm.participants.length || 1
+    //   return amount / count
+    // }
   }
 
 
@@ -69,8 +89,14 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
     )
   }
 
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
@@ -86,21 +112,30 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
         {/* Body */}
         <div className="p-6 space-y-4">
           {/* Descrição */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Descrição do gasto <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              value={expenseForm.description}
-              onChange={(e) => setExpenseForm({ ...expenseForm, description: e.target.value })}
               placeholder="Ex: Almoço no restaurante"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             />
-          </div>
+          </div> */}
+
+          <InputField
+            name="title"
+            control={control}
+            errors={errors}
+            label="Descrição do gasto"
+            placeholder="Ex: Almoço no restaurante"
+            typeInput="text"
+            required
+            color="green"
+          />
 
           {/* Valor */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Valor total <span className="text-red-500">*</span>
             </label>
@@ -108,30 +143,47 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
               <span className="absolute left-4 top-3 text-gray-500">R$</span>
               <input
                 type="number"
-                value={expenseForm.amount}
-                onChange={(e) => setExpenseForm({ ...expenseForm, amount: e.target.value })}
                 placeholder="0,00"
                 step="0.01"
                 className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               />
             </div>
-          </div>
+          </div> */}
+
+          <InputField
+            name="amount"
+            control={control}
+            errors={errors}
+            label="Valor total"
+            placeholder="R$ 0,00"
+            typeInput="number"
+            required
+            color="green"
+          />
 
           {/* Quem pagou */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Quem pagou <span className="text-red-500">*</span>
             </label>
             <select
-              value={expenseForm.paidBy}
-              onChange={(e) => setExpenseForm({ ...expenseForm, paidBy: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             >
               {trip.members.map(member => (
                 <option key={member.userId} value={member.name}>{member.name}</option>
               ))}
             </select>
-          </div>
+          </div> */}
+
+          <SelectField
+            name="paidById"
+            control={control}
+            errors={errors}
+            label="Quem pagou"
+            required
+            options={memberOptions}
+            color="green"
+          />
 
           {/* Forma de divisão */}
           <div>
@@ -139,8 +191,6 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
               Forma de divisão <span className="text-red-500">*</span>
             </label>
             <select
-              value={expenseForm.splitType}
-              onChange={(e) => setExpenseForm({ ...expenseForm, splitType: e.target.value as 'equal' | 'custom', participants: [] })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             >
               <option value="equal">Dividir igualmente</option>
@@ -149,7 +199,7 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
           </div>
 
           {/* Participantes (apenas se não for divisão igual) */}
-          {expenseForm.splitType === 'custom' && (
+          {/* {expenseForm.splitType === 'custom' && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Selecione os participantes deste gasto
@@ -173,7 +223,7 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Categoria (opcional) */}
           <div>
@@ -181,8 +231,6 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
               Categoria <span className="text-gray-400 text-xs">(opcional)</span>
             </label>
             <select
-              value={expenseForm.category}
-              onChange={(e) => setExpenseForm({ ...expenseForm, category: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             >
               <option value="">Selecione uma categoria</option>
@@ -201,14 +249,12 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
             </label>
             <input
               type="date"
-              value={expenseForm.date}
-              onChange={(e) => setExpenseForm({ ...expenseForm, date: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             />
           </div>
 
           {/* Prévia do valor por pessoa */}
-          {expenseForm.amount && (
+          {/* {expenseForm.amount && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -228,7 +274,7 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Footer */}
@@ -240,15 +286,16 @@ export function CreateExpenseModal({ trip }: CreateExpenseModalProps) {
             Cancelar
           </button>
           <button
-            onClick={handleSaveExpense}
-            disabled={!expenseForm.description || !expenseForm.amount}
+            type="submit"
+            // onClick={handleSaveExpense}
+            // disabled={!expenseForm.description || !expenseForm.amount}
             className="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-lg hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Salvar gasto
           </button>
         </div>
       </div>
-    </div>
+    </form>
   )
 
 }

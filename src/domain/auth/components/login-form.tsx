@@ -3,7 +3,7 @@
 import { Lock, Mail } from "lucide-react"
 import { useLoginForm } from "../hooks/useLoginForm"
 import { LoginSchema, LoginSchemaType } from "../schemas/loginSchema"
-import { Input } from "@/app/shared/ui/form/input"
+import { InputField } from "@/app/shared/ui/form/InputField"
 import { PasswordInput } from "@/app/shared/ui/form/passwordInput"
 import { useAuthContext } from "@/app/shared/providers/AuthProvider"
 import { useRouter } from "next/navigation"
@@ -47,15 +47,15 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-      <Input
+      <InputField
         name="email"
         control={control}
         errors={errors}
-        nameInput="Email"
-        nameLabelInput="email"
-        namePlaceholderInput="seu@email.com"
+        label="Email"
+        placeholder="seu@email.com"
         typeInput="text"
         Icon={Mail}
+        required
       />
 
       <PasswordInput
