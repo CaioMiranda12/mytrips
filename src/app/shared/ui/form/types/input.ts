@@ -6,6 +6,6 @@ export interface IInputProps extends IRHFProps {
   nameLabelInput: string
   typeInput: string
   namePlaceholderInput: string;
-  Icon: LucideIcon;
+  Icon?: LucideIcon;
 }
 
