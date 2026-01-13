@@ -11,7 +11,7 @@ export interface InputFieldProps extends IRHFProps {
   label: string;
   required?: boolean;
   placeholder?: string;
-  typeInput?: "text" | "email" | "password" | "number";
+  typeInput?: "text" | "email" | "password" | "number" | "date";
   Icon?: LucideIcon;
   color?: InputColorVariant;
 }
