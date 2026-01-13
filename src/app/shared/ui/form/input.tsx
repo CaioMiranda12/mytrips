@@ -1,8 +1,7 @@
 import { Controller } from "react-hook-form";
 import { IInputProps } from "./types/input";
 import ErrorMessage from "./ErrorMessage";
-import { User } from "lucide-react";
-
+import clsx from "clsx";
 
 export function Input({
   name,
@@ -24,14 +23,17 @@ export function Input({
             {nameInput}
           </label>
           <div className="relative">
-            <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {Icon && <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />}
             <input
               {...field}
               id={nameLabelInput}
               name={nameLabelInput}
               type={typeInput}
               placeholder={namePlaceholderInput}
-              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
+              className={clsx(
+                "w-full pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all",
+                Icon ? "pl-11" : "pl-4"
+              )}
               required
             />
           </div>
