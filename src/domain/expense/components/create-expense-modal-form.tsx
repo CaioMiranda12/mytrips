@@ -21,6 +21,16 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     label: member.name
   }));
 
+  const categoryOptions = [
+    // { value: "", label: "Selecione uma categoria" },
+    { value: "FOOD", label: "🍽️ Alimentação" },
+    { value: "TRANSPORT", label: "🚗 Transporte" },
+    { value: "LODGING", label: "🏨 Hospedagem" },
+    { value: "ENTERTAINMENT", label: "🎉 Lazer" },
+    { value: "OTHER", label: "📦 Outros" }
+  ];
+
+
 
   // const [expenseForm, setExpenseForm] = useState({
   //   description: '',
@@ -39,30 +49,25 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     reset,
     watch,
     errors,
-    clearErrors
+    clearErrors,
+    setValue
   } = useExpenseForm(ExpenseSchema)
 
-  const handleSaveExpense = () => {
-    setShowExpenseModal(false)
-    // setExpenseForm({
-    //   description: '',
-    //   amount: '',
-    //   paidBy: 'João Silva',
-    //   splitType: 'equal',
-    //   participants: [],
-    //   category: '',
-    //   date: new Date().toISOString().split('T')[0]
-    // })
-  }
+  const splitType = watch("splitType");
+  const participants = watch("participants") || [];
 
   const toggleParticipant = (memberId: string) => {
-    // setExpenseForm(prev => ({
-    //   ...prev,
-    //   participants: prev.participants.includes(memberId)
-    //     ? prev.participants.filter(id => id !== memberId)
-    //     : [...prev.participants, memberId]
-    // }))
-  }
+    const currentParticipants = watch("participants") || [];
+
+    if (currentParticipants.includes(memberId)) {
+      setValue(
+        "participants",
+        currentParticipants.filter(id => id !== memberId)
+      );
+    } else {
+      setValue("participants", [...currentParticipants, memberId]);
+    }
+  };
 
   const calculatePerPerson = () => {
     // const amount = parseFloat(expenseForm.amount) || 0
@@ -186,7 +191,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
           />
 
           {/* Forma de divisão */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Forma de divisão <span className="text-red-500">*</span>
             </label>
@@ -196,10 +201,34 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
               <option value="equal">Dividir igualmente</option>
               <option value="custom">Selecionar participantes</option>
             </select>
-          </div>
+          </div> */}
 
-          {/* Participantes (apenas se não for divisão igual) */}
-          {/* {expenseForm.splitType === 'custom' && (
+          {/* <SelectField
+            name="participants"
+            control={control}
+            errors={errors}
+            label="Forma de divisão2"
+            required
+            options={memberOptions}
+            color="green"
+          /> */}
+
+
+
+          <SelectField
+            name="splitType"
+            control={control}
+            errors={errors}
+            label="Forma de divisão"
+            required
+            options={[
+              { value: "equal", label: "Dividir igualmente" },
+              { value: "custom", label: "Selecionar participantes" },
+            ]}
+            color="green"
+          />
+
+          {splitType === 'custom' && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Selecione os participantes deste gasto
@@ -209,7 +238,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
                   <label key={member.userId} className="flex items-center gap-3 p-2 hover:bg-blue-100 rounded-lg cursor-pointer transition-colors">
                     <input
                       type="checkbox"
-                      checked={expenseForm.participants.includes(member.userId)}
+                      checked={participants.includes(member.userId)}
                       onChange={() => toggleParticipant(member.userId)}
                       className="w-5 h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
                     />
@@ -223,10 +252,11 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
                 ))}
               </div>
             </div>
-          )} */}
+          )}
+
 
           {/* Categoria (opcional) */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Categoria <span className="text-gray-400 text-xs">(opcional)</span>
             </label>
@@ -240,10 +270,19 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
               <option value="entertainment">🎉 Lazer</option>
               <option value="other">📦 Outros</option>
             </select>
-          </div>
+          </div> */}
+
+          <SelectField
+            name="category"
+            control={control}
+            errors={errors}
+            label="Categoria"
+            options={categoryOptions}
+            color="green"
+          />
 
           {/* Data (opcional) */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Data do gasto <span className="text-gray-400 text-xs">(opcional)</span>
             </label>
@@ -251,7 +290,16 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
               type="date"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
             />
-          </div>
+          </div> */}
+
+          <InputField
+            name="date"
+            control={control}
+            errors={errors}
+            label="Data do gasto"
+            typeInput="date"
+            color="green"
+          />
 
           {/* Prévia do valor por pessoa */}
           {/* {expenseForm.amount && (
