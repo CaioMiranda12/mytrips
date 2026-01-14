@@ -10,6 +10,7 @@ export const useExpenseForm = (schema: typeof ExpenseSchema) => {
     reset,
     watch,
     clearErrors,
+    setValue,
     formState: { errors }
   } = useForm<ExpenseSchemaType>({
     resolver: zodResolver(schema),
@@ -17,7 +18,9 @@ export const useExpenseForm = (schema: typeof ExpenseSchema) => {
       title: "",
       amount: "",
       date: "",
-      participants: []
+      participants: [],
+      splitType: "equal",
+      paidById: "",
     }
   })
 
@@ -28,6 +31,7 @@ export const useExpenseForm = (schema: typeof ExpenseSchema) => {
     reset,
     watch,
     errors,
-    clearErrors
+    clearErrors,
+    setValue
   }
 }
