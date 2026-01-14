@@ -30,8 +30,10 @@ export const ExpenseSchema = z.object({
     .uuid('Usuário inválido'),
 
   participants: z
-    .array(z.string().uuid())
-    .min(1, 'Selecione ao menos um participante'),
+    .array(z.string().uuid()),
+  // .min(1, 'Selecione ao menos um participante'),
+
+  splitType: z.enum(["equal", "custom"]),
 })
 
 export type ExpenseSchemaType = z.infer<typeof ExpenseSchema>
