@@ -1,3 +1,4 @@
+import { Expense } from '@/domain/expense/entities/Expense'
 import { TripRole } from '../entities/Trip'
 
 export type TripMemberView = {
@@ -16,4 +17,5 @@ export type TripDetailsView = {
   ownerId: string
   createdAt: Date
   members: TripMemberView[]
+  expenses: Expense[]
 }
