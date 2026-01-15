@@ -45,4 +45,22 @@ export class PrismaExpenseRepository implements ExpenseRepository {
       createdAt: expense.createdAt,
     };
   }
+
+  async findByTripId(tripId: string): Promise<Expense[]> {
+    const expensesList = await prisma.expense.findMany({
+      where: { tripId },
+      orderBy: { date: "desc" },
+    })
+
+    return expensesList.map(expense => ({
+      id: expense.id,
+      title: expense.title,
+      amount: Number(expense.amount),
+      category: expense.category as DomainExpenseCategory,
+      date: expense.date,
+      tripId: expense.tripId,
+      paidById: expense.paidById,
+      createdAt: expense.createdAt,
+    }))
+  }
 }

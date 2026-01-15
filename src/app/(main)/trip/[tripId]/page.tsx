@@ -11,8 +11,6 @@ export default function TripDetails() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'expenses' | 'activities'>('overview')
   const [linkCopied, setLinkCopied] = useState(false)
-  const [showExpenseModal, setShowExpenseModal] = useState(false)
-  const [showActivityModal, setShowActivityModal] = useState(false)
 
   const { tripId } = useParams<{ tripId: string }>()
 
