@@ -5,9 +5,11 @@ import { useState } from "react"
 import { formatCurrency } from "@/lib/formatCurrency"
 import { TripDetailsView } from "@/domain/trip/views/TripDetailsView"
 import { useExpenseForm } from "../hooks/useExpenseForm"
-import { ExpenseSchema } from "../schemas/expenseSchema"
+import { ExpenseSchema, ExpenseSchemaType } from "../schemas/expenseSchema"
 import { InputField } from "@/app/shared/ui/form/InputField"
 import { SelectField } from "@/app/shared/ui/form/SelectField"
+import { useCreateExpense } from "../hooks/useCreateExpense"
+import { ExpenseCategory } from "../enums/ExpenseCategory"
 
 interface CreateExpenseModalProps {
   trip: TripDetailsView
@@ -15,6 +17,7 @@ interface CreateExpenseModalProps {
 
 export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
   const [showExpenseModal, setShowExpenseModal] = useState(false)
+  const { createExpense } = useCreateExpense(trip.id) // o problema ta aqui
 
   const memberOptions = trip.members.map(member => ({
     value: member.userId,
@@ -29,18 +32,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     { value: "ENTERTAINMENT", label: "🎉 Lazer" },
     { value: "OTHER", label: "📦 Outros" }
   ];
-
-
-
-  // const [expenseForm, setExpenseForm] = useState({
-  //   description: '',
-  //   amount: '',
-  //   paidBy: 'João Silva',
-  //   splitType: 'equal' as 'equal' | 'custom',
-  //   participants: [] as string[],
-  //   category: '',
-  //   date: new Date().toISOString().split('T')[0]
-  // })
 
   const {
     register,
@@ -94,8 +85,36 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     )
   }
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = (formData: ExpenseSchemaType) => {
+    const {
+      title,
+      amount,
+      category,
+      date,
+      paidById,
+      participants,
+      splitType
+    } = formData;
+
+    const resolvedParticipants = splitType === 'equal' ? trip.members.map(member => member.userId) : participants ?? [];
+
+    const resolvedDate = date ? new Date(date) : new Date();
+
+    const expensePayload = {
+      tripId: trip.id,
+      title,
+      amount,
+      category: category
+        ? (category as ExpenseCategory)
+        : undefined,
+      date: resolvedDate,
+      paidById,
+      participants: resolvedParticipants,
+      splitType,
+    };
+
+    console.log(expensePayload);
+    createExpense(expensePayload);
   }
 
   return (

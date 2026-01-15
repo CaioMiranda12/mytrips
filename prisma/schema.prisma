@@ -78,6 +78,8 @@ model Expense {
   tripId   String
   paidById String @db.Uuid
 
+  splitType SplitType @default(EQUAL)
+
   category ExpenseCategory?
   date     DateTime         @default(now())
 
@@ -89,6 +91,11 @@ model Expense {
   createdAt DateTime @default(now())
 
   @@map("expenses")
+}
+
+enum SplitType {
+  EQUAL
+  CUSTOM
 }
 
 enum ExpenseCategory {
