@@ -31,6 +31,7 @@ export function LoginForm() {
     try {
       await signIn(email, password)
 
+      toast.success('Login realizado com sucesso!');
       router.refresh()
       router.push('/dashboard')
 
