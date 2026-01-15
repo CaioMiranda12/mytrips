@@ -105,6 +105,16 @@ export class PrismaTripRepository implements TripRepository {
         role: member.role,
         name: member.user.name,
       })),
+      expenses: trip.expenses.map(expense => ({
+        id: expense.id,
+        title: expense.title,
+        tripId: expense.tripId,
+        amount: expense.amount.toNumber(),
+        paidBy: expense.paidById,
+        createdAt: expense.createdAt,
+        date: expense.date,
+        paidById: expense.paidById,
+      })),
     }
   }
 }
