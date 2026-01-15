@@ -11,9 +11,10 @@ import { SelectField } from "@/app/shared/ui/form/SelectField"
 import { useCreateExpense } from "../hooks/useCreateExpense"
 import { ExpenseCategory } from "../enums/ExpenseCategory"
 import { toast } from "react-toastify"
+import { Trip } from "@/domain/trip/entities/Trip"
 
 interface CreateExpenseModalProps {
-  trip: TripDetailsView
+  trip: Trip;
 }
 
 export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {

@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { Plane, ArrowLeft, Users, Link2, Wallet, Calendar, Plus, Copy, Check, MapPin, DollarSign, Clock } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
 import { formatDate } from '@/lib/formatDate'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { CreateExpenseModalForm } from '@/domain/expense/components/create-expense-modal-form'
@@ -12,6 +11,7 @@ import { TripInfoTab } from '@/domain/trip/components/tabs/TripInfoTab'
 import { ExpensesTab } from '@/domain/trip/components/tabs/ExpensesTab'
 import { MembersTab } from '@/domain/trip/components/tabs/MembersTab'
 import { TripDetailsHeader } from '@/domain/trip/components/ui/TripDetailsHeader'
+import { useTripDetails } from '@/app/shared/providers/TripDetailsProvider'
 
 
 export default function TripDetails() {
@@ -19,13 +19,9 @@ export default function TripDetails() {
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'expenses' | 'activities'>('overview')
   const [linkCopied, setLinkCopied] = useState(false)
 
-  const { tripId } = useParams<{ tripId: string }>()
+  const { trip, members, expenses } = useTripDetails()
 
-  const { trip, loading } = useTripDetails(tripId)
-  const { expenses, loading: expensesLoading } = useGetTripExpenses(tripId)
-  console.log(trip)
-
-  if (!trip) return;
+  if (!trip) return <div>viagem nao encontrada</div>;
 
   const activities = [
     { id: '1', name: 'Passeio no centro histórico', date: '2024-07-16', status: 'confirmed' },
@@ -47,9 +43,9 @@ export default function TripDetails() {
       <TripDetailsHeader trip={trip} linkCopied={linkCopied} copyInviteLink={copyInviteLink} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {activeTab === 'overview' && <TripInfoTab tripId={tripId} />}
-        {activeTab === 'expenses' && <ExpensesTab tripId={tripId} />}
-        {activeTab === 'members' && <MembersTab tripId={tripId} />}
+        {activeTab === 'overview' && <TripInfoTab trip={trip} members={members} expenses={expenses} />}
+        {activeTab === 'expenses' && <ExpensesTab trip={trip} members={members} expenses={expenses} />}
+        {activeTab === 'members' && <MembersTab trip={trip} members={members} expenses={expenses} />}
       </main>
     </div>
   )

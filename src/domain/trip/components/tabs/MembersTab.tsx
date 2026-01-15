@@ -1,23 +1,23 @@
 'use state'
 import { Check, Copy, Link2 } from "lucide-react";
-import { Trip } from "../../entities/Trip";
-import { useTripDetails } from "../../hooks/useTripDetails";
-import { useGetTripExpenses } from "@/domain/expense/hooks/useGetTripExpenses";
+import { Trip, TripMember } from "../../entities/Trip";
 import { useState } from "react";
+import { Expense } from "@/domain/expense/entities/Expense";
 
 interface TripTabProps {
-  tripId: string;
+  trip: Trip;
+  members: TripMember[];
+  expenses: Expense[];
 }
 
-export function MembersTab({ tripId }: TripTabProps) {
-  const [linkCopied, setLinkCopied] = useState(false);
 
-  const { trip, loading } = useTripDetails(tripId)
+export function MembersTab({ trip, members, expenses }: TripTabProps) {
+  const [linkCopied, setLinkCopied] = useState(false);
 
   if (!trip) return;
 
   const copyInviteLink = () => {
-    navigator.clipboard.writeText(`https://familytripplanner.com/join/${tripId}`)
+    navigator.clipboard.writeText(`https://familytripplanner.com/join/${trip.id}`)
     setLinkCopied(true)
     setTimeout(() => setLinkCopied(false), 2000)
   }
@@ -37,7 +37,7 @@ export function MembersTab({ tripId }: TripTabProps) {
             <div className="flex gap-2">
               <input
                 type="text"
-                value={`https://familytripplanner.com/join/${tripId}`}
+                value={`https://familytripplanner.com/join/${trip.id}`}
                 readOnly
                 className="flex-1 px-4 py-2 bg-white border border-orange-200 rounded-lg text-sm"
               />

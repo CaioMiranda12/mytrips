@@ -3,19 +3,21 @@ import { Calendar, MapPin, Users, Wallet } from "lucide-react";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useGetTripExpenses } from "@/domain/expense/hooks/useGetTripExpenses";
 import { formatCurrency } from "@/lib/formatCurrency";
+import { Trip, TripMember } from "../../entities/Trip";
+import { Expense } from "@/domain/expense/entities/Expense";
 
 interface TripTabProps {
-  tripId: string;
+  trip: Trip;
+  members: TripMember[];
+  expenses: Expense[];
 }
 
-export function TripInfoTab({ tripId }: TripTabProps) {
-  const { trip, loading } = useTripDetails(tripId)
-  const { expenses, loading: expensesLoading } = useGetTripExpenses(tripId)
+export function TripInfoTab({ trip, members, expenses }: TripTabProps) {
 
   if (!trip) return;
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
-  const perPerson = totalExpenses / trip.members.length
+  const perPerson = totalExpenses / members.length
 
   const activities = [
     { id: '1', name: 'Passeio no centro histórico', date: '2024-07-16', status: 'confirmed' },

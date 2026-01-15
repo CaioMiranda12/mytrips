@@ -1,23 +1,24 @@
 import { Check, DollarSign, Link2 } from "lucide-react";
-import { Trip } from "../../entities/Trip";
+import { Trip, TripMember } from "../../entities/Trip";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useGetTripExpenses } from "@/domain/expense/hooks/useGetTripExpenses";
 import { formatCurrency } from "@/lib/formatCurrency";
 import { CreateExpenseModalForm } from "@/domain/expense/components/create-expense-modal-form";
 import { formatDate } from "@/lib/formatDate";
+import { Expense } from "@/domain/expense/entities/Expense";
 
 interface TripTabProps {
-  tripId: string;
+  trip: Trip;
+  members: TripMember[];
+  expenses: Expense[];
 }
 
-export function ExpensesTab({ tripId }: TripTabProps) {
-  const { trip, loading } = useTripDetails(tripId)
-  const { expenses, loading: expensesLoading } = useGetTripExpenses(tripId)
+export function ExpensesTab({ trip, members, expenses }: TripTabProps) {
 
   if (!trip) return;
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
-  const perPerson = totalExpenses / trip.members.length
+  const perPerson = totalExpenses / members.length
 
   return (
     <div className="space-y-6">
