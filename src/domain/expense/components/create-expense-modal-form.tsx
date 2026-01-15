@@ -10,6 +10,7 @@ import { InputField } from "@/app/shared/ui/form/InputField"
 import { SelectField } from "@/app/shared/ui/form/SelectField"
 import { useCreateExpense } from "../hooks/useCreateExpense"
 import { ExpenseCategory } from "../enums/ExpenseCategory"
+import { toast } from "react-toastify"
 
 interface CreateExpenseModalProps {
   trip: TripDetailsView
@@ -17,7 +18,7 @@ interface CreateExpenseModalProps {
 
 export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
   const [showExpenseModal, setShowExpenseModal] = useState(false)
-  const { createExpense } = useCreateExpense(trip.id) // o problema ta aqui
+  const { createExpense } = useCreateExpense(trip.id)
 
   const memberOptions = trip.members.map(member => ({
     value: member.userId,
@@ -37,7 +38,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     register,
     handleSubmit,
     control,
-    reset,
+    reset: resetForm,
     watch,
     errors,
     clearErrors,
@@ -113,8 +114,10 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
       splitType,
     };
 
-    console.log(expensePayload);
     createExpense(expensePayload);
+    toast.success('Gasto adicionado com sucesso!')
+    resetForm();
+    clearErrors();
   }
 
   return (
