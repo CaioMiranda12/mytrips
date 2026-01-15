@@ -6,6 +6,7 @@ import { useTripDetails } from '@/domain/trip/hooks/useTripDetails'
 import { formatDate } from '@/lib/formatDate'
 import { formatCurrency } from '@/lib/formatCurrency'
 import { CreateExpenseModalForm } from '@/domain/expense/components/create-expense-modal-form'
+import { useGetTripExpenses } from '@/domain/expense/hooks/useGetTripExpenses'
 
 export default function TripDetails() {
   const router = useRouter()
@@ -18,20 +19,21 @@ export default function TripDetails() {
   // const trip = {
   //   name: 'Viagem para Gramado',
   //   startDate: '2024-07-15',
-  //   endDate: '2024-07-22',
+  //   endDate: '2024-07-22', 
   //   location: 'Gramado, RS'
   // }
 
   const { trip, loading } = useTripDetails(tripId)
+  const { expenses, loading: expensesLoading } = useGetTripExpenses(tripId)
   console.log(trip)
 
   if (!trip) return;
 
-  const expenses = [
-    { id: '1', description: 'Hotel 3 noites', amount: 1200, paidBy: 'João Silva', date: '2024-07-15' },
-    { id: '2', description: 'Restaurante', amount: 350, paidBy: 'Maria Santos', date: '2024-07-16' },
-    { id: '3', description: 'Gasolina', amount: 200, paidBy: 'Pedro Costa', date: '2024-07-15' },
-  ]
+  // const expenses = [
+  //   { id: '1', description: 'Hotel 3 noites', amount: 1200, paidBy: 'João Silva', date: '2024-07-15' },
+  //   { id: '2', description: 'Restaurante', amount: 350, paidBy: 'Maria Santos', date: '2024-07-16' },
+  //   { id: '3', description: 'Gasolina', amount: 200, paidBy: 'Pedro Costa', date: '2024-07-15' },
+  // ]
 
   const activities = [
     { id: '1', name: 'Passeio no centro histórico', date: '2024-07-16', status: 'confirmed' },
@@ -286,8 +288,8 @@ export default function TripDetails() {
                         <DollarSign className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-800">{expense.description}</p>
-                        <p className="text-sm text-gray-500">Pago por {expense.paidBy}</p>
+                        <p className="font-semibold text-gray-800">{expense.title}</p>
+                        <p className="text-sm text-gray-500">Pago por {expense.paidById}</p>
                       </div>
                     </div>
                     <div className="text-right">
