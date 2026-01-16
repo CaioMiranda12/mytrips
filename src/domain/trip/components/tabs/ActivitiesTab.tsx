@@ -2,6 +2,7 @@ import { Expense } from "@/domain/expense/entities/Expense";
 import { Trip, TripMember } from "../../entities/Trip";
 import { Clock, MapPin, Plus } from "lucide-react";
 import { formatDate } from "@/lib/formatDate";
+import { CreateActivityModalForm } from "@/domain/activities/components/create-activity-modal-form";
 
 interface TripTabProps {
   trip: Trip;
@@ -16,10 +17,7 @@ export default function ActivitiesTab({ trip, members, expenses, activities }: T
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Roteiro de passeios</h2>
-          <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium rounded-lg hover:shadow-md transition-all flex items-center gap-2">
-            <Plus className="w-4 h-4" />
-            <span>Adicionar passeio</span>
-          </button>
+          <CreateActivityModalForm trip={trip} />
         </div>
 
         <div className="space-y-3">
