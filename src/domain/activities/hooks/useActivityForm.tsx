@@ -16,10 +16,12 @@ export const useActivityForm = (schema: typeof ActivitySchema) => {
     resolver: zodResolver(schema),
     defaultValues: {
       title: "",
+      date: "",
+      hour: "",
       description: "",
-      date: new Date(),
+      amount: "",
       status: "PLANNED",
-      tripId: "",
+      tripId: ""
     }
   })
 

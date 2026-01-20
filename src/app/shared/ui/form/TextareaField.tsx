@@ -5,14 +5,13 @@ import clsx from "clsx";
 import { inputVariants } from "./styles/inputVariants";
 
 
-export function InputField({
+export function TextAreaField({
   name,
   control,
   errors,
   label,
   required,
   typeInput = "text",
-  opitionalText,
   placeholder,
   Icon,
   color
@@ -25,7 +24,6 @@ export function InputField({
         <FieldWrapper
           label={label}
           required={required}
-          opitionalText={opitionalText}
           error={errors?.[name]?.message as string}
         >
           <div className="relative">
@@ -33,12 +31,12 @@ export function InputField({
               <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             )}
 
-            <input
+            <textarea
               {...field}
-              type={typeInput}
               placeholder={placeholder}
+              rows={3}
               className={clsx(
-                "w-full pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 outline-none transition-all",
+                "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all resize-none outline-none",
                 Icon ? "pl-11" : "pl-4",
                 inputVariants[color ?? 'default']
               )}

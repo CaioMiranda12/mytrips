@@ -6,6 +6,9 @@ import { ActivitySchema } from "../schemas/activitySchema"
 import { Plus, X } from "lucide-react";
 import { formatDate } from "@/lib/formatDate";
 import { Trip } from "@/domain/trip/entities/Trip";
+import { InputField } from "@/app/shared/ui/form/InputField";
+import { TextAreaField } from "@/app/shared/ui/form/TextareaField";
+import { SelectField } from "@/app/shared/ui/form/SelectField";
 
 interface CreateActivityModalFormProps {
   trip: Trip;
@@ -14,11 +17,18 @@ interface CreateActivityModalFormProps {
 export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) {
   const [showActivityModal, setShowActivityModal] = useState(false);
 
+  const statusOptions = [
+    { value: 'PLANNED', label: 'Planejado' },
+    { value: 'DONE', label: 'Concluído' },
+    { value: 'CANCELED', label: 'Cancelado' },
+  ]
+
   const {
     register,
     handleSubmit,
     control,
     reset,
+    errors,
     watch,
     clearErrors,
     setValue,
@@ -58,76 +68,71 @@ export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) 
 
         {/* Body */}
         <div className="p-6 space-y-4">
-          {/* Nome do passeio */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nome do passeio <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Ex: Visita ao Lago Negro"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-            />
-          </div>
+          <InputField
+            name="title"
+            control={control}
+            errors={errors}
+            label="Nome do passeio"
+            placeholder="Ex: Visita ao Lago Negro"
+            typeInput="text"
+            required
+          />
 
-          {/* Dia do passeio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Dia do passeio <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              // min={trip.startDate}
-              // max={trip.endDate}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+            <InputField
+              name="date"
+              control={control}
+              errors={errors}
+              label="Dia do passeio"
+              typeInput="date"
+              required
             />
             <p className="text-xs text-gray-500 mt-1">
               Período da viagem: {formatDate(trip.startDate)} até {formatDate(trip.endDate)}
             </p>
           </div>
 
-          {/* Horário (opcional) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Horário <span className="text-gray-400 text-xs">(opcional)</span>
-            </label>
-            <input
-              type="time"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-            />
-          </div>
+          <InputField
+            name="hour"
+            control={control}
+            errors={errors}
+            label="Horário"
+            typeInput="time"
+          />
 
-          {/* Descrição / Observações (opcional) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descrição / Observações <span className="text-gray-400 text-xs">(opcional)</span>
-            </label>
-            <textarea
-              placeholder="Adicione detalhes sobre o passeio, endereço, observações..."
-              rows={3}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all resize-none"
-            />
-          </div>
+          <TextAreaField
+            name="description"
+            control={control}
+            errors={errors}
+            label=" Descrição / Observações"
+            placeholder="Adicione detalhes sobre o passeio, endereço, observações..."
+          />
 
-          {/* Custo estimado (opcional) */}
+          <SelectField
+            name="status"
+            control={control}
+            errors={errors}
+            label="Status"
+            options={statusOptions}
+          />
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Custo estimado <span className="text-gray-400 text-xs">(opcional - não é gasto real)</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-4 top-3 text-gray-500">R$</span>
-              <input
-                type="number"
-                placeholder="0,00"
-                step="0.01"
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-              />
-            </div>
+            <InputField
+              name="amount"
+              control={control}
+              errors={errors}
+              label="Custo estimado"
+              placeholder="R$ 0,00"
+              typeInput="number"
+              opitionalText="não é gasto real"
+            />
             <p className="text-xs text-gray-500 mt-1">
               💡 Este valor é apenas para planejamento, não será adicionado aos gastos
             </p>
           </div>
         </div>
+
+
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex gap-3 rounded-b-2xl">

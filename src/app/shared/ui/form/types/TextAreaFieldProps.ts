@@ -2,12 +2,10 @@ import { IRHFProps } from "./types";
 import { LucideIcon } from "lucide-react";
 import { InputColorVariant } from "../styles/inputVariants";
 
-export interface InputFieldProps extends IRHFProps {
+export interface TextAreaFieldProps extends IRHFProps {
   label: string;
   required?: boolean;
   placeholder?: string;
-  typeInput?: "text" | "email" | "password" | "number" | "date" | "time";
-  opitionalText?: string;
   Icon?: LucideIcon;
   color?: InputColorVariant;
 }

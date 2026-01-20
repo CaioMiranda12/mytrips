@@ -1,5 +1,6 @@
+import { Control, FieldErrors } from "react-hook-form";
 export interface IRHFProps {
   name: string;
-  control: any;
-  errors?: any;
+  control: Control<any>;
+  errors?: FieldErrors<any>;
 }

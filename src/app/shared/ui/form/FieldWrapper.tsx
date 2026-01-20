@@ -7,13 +7,15 @@ interface FieldWrapperProps {
   required?: boolean;
   error?: string;
   children: React.ReactNode;
+  opitionalText?: string;
 }
 
 export function FieldWrapper({
   label,
   required,
   error,
-  children
+  children,
+  opitionalText
 }: FieldWrapperProps) {
   return (
     <div>
@@ -22,7 +24,7 @@ export function FieldWrapper({
         {required ? (
           <span className="text-red-500">*</span>
         ) : (
-          <span className="text-gray-400 text-xs">(opcional)</span>
+          <span className="text-gray-400 text-xs">(opcional{opitionalText && ` - ${opitionalText}`})</span>
         )}
       </label>
 

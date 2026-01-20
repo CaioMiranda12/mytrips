@@ -13,9 +13,11 @@ export default function TripDetails() {
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'expenses' | 'activities'>('overview')
   const [linkCopied, setLinkCopied] = useState(false)
 
-  const { trip, members, expenses } = useTripDetails()
+  const { trip, members, expenses, loading } = useTripDetails()
 
-  if (!trip) return <LoadingScreen />
+  if (loading) return <LoadingScreen />
+
+  if (!trip) return <div>Trip nao encontrada</div>
 
   const activities = [
     { id: '1', name: 'Passeio no centro histórico', date: '2024-07-16', status: 'confirmed' },
