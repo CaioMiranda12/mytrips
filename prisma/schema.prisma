@@ -124,7 +124,7 @@ model Activity {
   description String?
 
   date          DateTime
-  time          String?
+  hour          String?
   estimatedCost Decimal? @db.Decimal(10, 2)
 
   status ActivityStatus @default(PLANNED)

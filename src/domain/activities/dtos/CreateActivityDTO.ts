@@ -5,4 +5,6 @@ export type CreateActivityDTO = {
   date: Date;
   status: 'PLANNED' | 'DONE' | 'CANCELED';
   tripId: string;
+  estimatedCost?: number;
+  hour?: string;
 }

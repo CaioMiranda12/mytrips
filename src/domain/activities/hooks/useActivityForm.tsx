@@ -19,7 +19,7 @@ export const useActivityForm = (schema: typeof ActivitySchema) => {
       date: "",
       hour: "",
       description: "",
-      amount: "",
+      estimatedCost: "",
       status: "PLANNED",
       tripId: ""
     }

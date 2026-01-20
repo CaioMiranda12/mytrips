@@ -5,7 +5,7 @@ export type Activity = {
   description?: string;
   date: Date;
   hour?: string;
-  amount?: number;
+  estimatedCost?: number;
   status: 'PLANNED' | 'DONE' | 'CANCELED';
   tripId: string;
   createdAt: Date;

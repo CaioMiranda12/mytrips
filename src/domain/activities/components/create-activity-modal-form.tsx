@@ -2,13 +2,15 @@
 
 import { useState } from "react"
 import { useActivityForm } from "../hooks/useActivityForm"
-import { ActivitySchema } from "../schemas/activitySchema"
+import { ActivitySchema, ActivitySchemaType } from "../schemas/activitySchema"
 import { Plus, X } from "lucide-react";
 import { formatDate } from "@/lib/formatDate";
 import { Trip } from "@/domain/trip/entities/Trip";
 import { InputField } from "@/app/shared/ui/form/InputField";
 import { TextAreaField } from "@/app/shared/ui/form/TextareaField";
 import { SelectField } from "@/app/shared/ui/form/SelectField";
+import { useCreateActivity } from "../hooks/useCreateActivity";
+import { toast } from "react-toastify";
 
 interface CreateActivityModalFormProps {
   trip: Trip;
@@ -16,6 +18,7 @@ interface CreateActivityModalFormProps {
 
 export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) {
   const [showActivityModal, setShowActivityModal] = useState(false);
+  const { createActivity, loading } = useCreateActivity(trip.id);
 
   const statusOptions = [
     { value: 'PLANNED', label: 'Planejado' },
@@ -34,8 +37,23 @@ export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) 
     setValue,
   } = useActivityForm(ActivitySchema)
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = (formData: ActivitySchemaType) => {
+    const { title, date, hour, description, estimatedCost, status, tripId } = formData;
+
+    const activityPayload = {
+      title,
+      date: new Date(date),
+      hour,
+      description,
+      estimatedCost: estimatedCost ? Number(estimatedCost) : undefined,
+      status,
+      tripId: trip.id,
+    }
+
+    createActivity(activityPayload)
+    reset();
+    setShowActivityModal(false);
+    toast.success('Passeio criado com sucesso!')
   }
 
   if (!showActivityModal) {
@@ -118,7 +136,7 @@ export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) 
 
           <div>
             <InputField
-              name="amount"
+              name="estimatedCost"
               control={control}
               errors={errors}
               label="Custo estimado"
