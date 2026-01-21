@@ -52,6 +52,7 @@ export function CreateActivityModalForm({ trip }: CreateActivityModalFormProps) 
 
     createActivity(activityPayload)
     reset();
+    clearErrors();
     setShowActivityModal(false);
     toast.success('Passeio criado com sucesso!')
   }
