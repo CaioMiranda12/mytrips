@@ -1,4 +1,4 @@
-import { Check, DollarSign, Link2 } from "lucide-react";
+import { Check, DollarSign, Link2, MoreVertical } from "lucide-react";
 import { Trip, TripMember } from "../../entities/Trip";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useGetTripExpenses } from "@/domain/expense/hooks/useGetTripExpenses";
@@ -58,9 +58,17 @@ export function ExpensesTab({ trip, members, expenses }: TripTabProps) {
                   <p className="text-sm text-gray-500">Pago por {expense.paidBy?.name}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="font-bold text-gray-800">{formatCurrency(expense.amount)}</p>
-                <p className="text-xs text-gray-500">{formatDate(expense.date)}</p>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="font-bold text-gray-800">{formatCurrency(expense.amount)}</p>
+                  <p className="text-xs text-gray-500">{formatDate(expense.date)}</p>
+                </div>
+                <button
+                  className="w-8 h-8 flex items-center justify-center hover:bg-white rounded-lg transition-colors"
+                  title="Editar ou excluir gasto"
+                >
+                  <MoreVertical className="w-5 h-5 text-gray-600" />
+                </button>
               </div>
             </div>
           ))}
