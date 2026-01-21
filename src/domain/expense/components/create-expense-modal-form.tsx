@@ -48,6 +48,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
 
   const splitType = watch("splitType");
   const participants = watch("participants") || [];
+  const amount = watch("amount");
 
   const toggleParticipant = (memberId: string) => {
     const currentParticipants = watch("participants") || [];
@@ -63,15 +64,14 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
   };
 
   const calculatePerPerson = () => {
-    // const amount = parseFloat(expenseForm.amount) || 0
-    // if (expenseForm.splitType === 'equal') {
-    //   return amount / trip.members.length
-    // } else {
-    //   const count = expenseForm.participants.length || 1
-    //   return amount / count
-    // }
+    const newAmount = parseFloat(amount) || 0
+    if (splitType === 'equal') {
+      return newAmount / trip.members.length
+    } else {
+      const count = participants.length || 1
+      return newAmount / count
+    }
   }
-
 
   if (!showExpenseModal) {
     return (
@@ -138,20 +138,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-6 space-y-4">
-          {/* Descrição */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descrição do gasto <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Ex: Almoço no restaurante"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            />
-          </div> */}
-
           <InputField
             name="title"
             control={control}
@@ -162,22 +149,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
             required
             color="green"
           />
-
-          {/* Valor */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Valor total <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-4 top-3 text-gray-500">R$</span>
-              <input
-                type="number"
-                placeholder="0,00"
-                step="0.01"
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-              />
-            </div>
-          </div> */}
 
           <InputField
             name="amount"
@@ -190,20 +161,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
             color="green"
           />
 
-          {/* Quem pagou */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Quem pagou <span className="text-red-500">*</span>
-            </label>
-            <select
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            >
-              {trip.members.map(member => (
-                <option key={member.userId} value={member.name}>{member.name}</option>
-              ))}
-            </select>
-          </div> */}
-
           <SelectField
             name="paidById"
             control={control}
@@ -213,31 +170,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
             options={memberOptions}
             color="green"
           />
-
-          {/* Forma de divisão */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Forma de divisão <span className="text-red-500">*</span>
-            </label>
-            <select
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            >
-              <option value="equal">Dividir igualmente</option>
-              <option value="custom">Selecionar participantes</option>
-            </select>
-          </div> */}
-
-          {/* <SelectField
-            name="participants"
-            control={control}
-            errors={errors}
-            label="Forma de divisão2"
-            required
-            options={memberOptions}
-            color="green"
-          /> */}
-
-
 
           <SelectField
             name="splitType"
@@ -278,24 +210,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
             </div>
           )}
 
-
-          {/* Categoria (opcional) */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Categoria <span className="text-gray-400 text-xs">(opcional)</span>
-            </label>
-            <select
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            >
-              <option value="">Selecione uma categoria</option>
-              <option value="food">🍽️ Alimentação</option>
-              <option value="transport">🚗 Transporte</option>
-              <option value="accommodation">🏨 Hospedagem</option>
-              <option value="entertainment">🎉 Lazer</option>
-              <option value="other">📦 Outros</option>
-            </select>
-          </div> */}
-
           <SelectField
             name="category"
             control={control}
@@ -304,17 +218,6 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
             options={categoryOptions}
             color="green"
           />
-
-          {/* Data (opcional) */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Data do gasto <span className="text-gray-400 text-xs">(opcional)</span>
-            </label>
-            <input
-              type="date"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            />
-          </div> */}
 
           <InputField
             name="date"
@@ -326,7 +229,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
           />
 
           {/* Prévia do valor por pessoa */}
-          {/* {expenseForm.amount && (
+          {amount && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -338,15 +241,15 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
                     {formatCurrency(calculatePerPerson())}
                   </p>
                   <p className="text-xs text-gray-600 mt-1">
-                    {expenseForm.splitType === 'equal'
+                    {splitType === 'equal'
                       ? `Dividido entre ${trip.members.length} pessoas`
-                      : `Dividido entre ${expenseForm.participants.length || 0} pessoa(s) selecionada(s)`
+                      : `Dividido entre ${participants.length || 0} pessoa(s) selecionada(s)`
                     }
                   </p>
                 </div>
               </div>
             </div>
-          )} */}
+          )}
         </div>
 
         {/* Footer */}
