@@ -3,6 +3,7 @@ export type TripRole = 'ADMIN' | 'MEMBER'
 export type TripMember = {
   userId: string;
   role: TripRole;
+  name: string;
 }
 
 export type Trip = {

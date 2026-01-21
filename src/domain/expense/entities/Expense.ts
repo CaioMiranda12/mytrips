@@ -8,5 +8,9 @@ export type Expense = {
   date: Date;
   tripId: string;
   paidById: string;
+  paidBy?: {
+    id: string;
+    name: string;
+  }
   createdAt: Date;
 };

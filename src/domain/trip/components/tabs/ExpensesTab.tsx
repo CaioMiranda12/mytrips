@@ -41,13 +41,6 @@ export function ExpensesTab({ trip, members, expenses }: TripTabProps) {
       </div>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        {/* <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Lista de gastos</h2>
-                <button className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-lg hover:shadow-md transition-all flex items-center gap-2">
-                  <Plus className="w-4 h-4" />
-                  <span>Adicionar gasto</span>
-                </button>
-              </div> */}
         <CreateExpenseModalForm trip={trip} />
 
         <div className="space-y-3">
@@ -62,7 +55,7 @@ export function ExpensesTab({ trip, members, expenses }: TripTabProps) {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-800">{expense.title}</p>
-                  <p className="text-sm text-gray-500">Pago por {expense.paidById}</p>
+                  <p className="text-sm text-gray-500">Pago por {expense.paidBy?.name}</p>
                 </div>
               </div>
               <div className="text-right">

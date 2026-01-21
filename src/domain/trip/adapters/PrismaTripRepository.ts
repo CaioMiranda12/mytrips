@@ -24,7 +24,16 @@ export class PrismaTripRepository implements TripRepository {
         },
       },
       include: {
-        members: true,
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
       },
     })
 
@@ -40,6 +49,7 @@ export class PrismaTripRepository implements TripRepository {
       members: trip.members.map(member => ({
         userId: member.userId,
         role: member.role,
+        name: member.user.name
       })),
     }
   }
@@ -51,7 +61,18 @@ export class PrismaTripRepository implements TripRepository {
           some: { userId },
         },
       },
-      include: { members: true },
+      include: {
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+      },
     })
 
     return trips.map(trip => ({
@@ -66,6 +87,7 @@ export class PrismaTripRepository implements TripRepository {
       members: trip.members.map(member => ({
         userId: member.userId,
         role: member.role,
+        name: member.user.name,
       })),
     }))
   }
@@ -85,7 +107,16 @@ export class PrismaTripRepository implements TripRepository {
           }
         },
         activities: true,
-        expenses: true
+        expenses: {
+          include: {
+            paidBy: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        }
       },
     })
 
@@ -110,7 +141,10 @@ export class PrismaTripRepository implements TripRepository {
         title: expense.title,
         tripId: expense.tripId,
         amount: expense.amount.toNumber(),
-        paidBy: expense.paidById,
+        paidBy: {
+          id: expense.paidBy.id,
+          name: expense.paidBy.name
+        },
         createdAt: expense.createdAt,
         date: expense.date,
         paidById: expense.paidById,
