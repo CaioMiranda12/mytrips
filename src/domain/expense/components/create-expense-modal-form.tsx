@@ -119,6 +119,7 @@ export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
     toast.success('Gasto adicionado com sucesso!')
     resetForm();
     clearErrors();
+    setShowExpenseModal(false);
   }
 
   return (
