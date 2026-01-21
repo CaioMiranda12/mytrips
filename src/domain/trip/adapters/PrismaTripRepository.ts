@@ -108,6 +108,9 @@ export class PrismaTripRepository implements TripRepository {
         },
         activities: true,
         expenses: {
+          orderBy: {
+            date: 'desc'
+          },
           include: {
             paidBy: {
               select: {
