@@ -23,7 +23,6 @@ export async function signInAction(
 ) {
   const user = await new SignInWithEmail(repo).execute(email, password)
 
-  // 🔥 ISSO ESTAVA FALTANDO
   await createSession(user.id)
 
   return user
