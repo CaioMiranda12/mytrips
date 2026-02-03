@@ -30,6 +30,9 @@ export class PrismaExpenseRepository implements ExpenseRepository {
           },
         },
       },
+      include: {
+        participants: true,
+      }
     });
 
     return {
@@ -43,6 +46,11 @@ export class PrismaExpenseRepository implements ExpenseRepository {
       tripId: expense.tripId,
       paidById: expense.paidById,
       createdAt: expense.createdAt,
+      participants: expense.participants.map(participant => ({
+        id: participant.id,
+        expenseId: participant.expenseId,
+        userId: participant.userId
+      }))
     };
   }
 
@@ -50,6 +58,9 @@ export class PrismaExpenseRepository implements ExpenseRepository {
     const expensesList = await prisma.expense.findMany({
       where: { tripId },
       orderBy: { date: "desc" },
+      include: {
+        participants: true,
+      }
     })
 
     return expensesList.map(expense => ({
@@ -61,6 +72,11 @@ export class PrismaExpenseRepository implements ExpenseRepository {
       tripId: expense.tripId,
       paidById: expense.paidById,
       createdAt: expense.createdAt,
+      participants: expense.participants?.map(participant => ({
+        id: participant.id,
+        expenseId: participant.expenseId,
+        userId: participant.userId
+      })) || []
     }))
   }
 }

@@ -12,14 +12,19 @@ import { useCreateExpense } from "../hooks/useCreateExpense"
 import { ExpenseCategory } from "../enums/ExpenseCategory"
 import { toast } from "react-toastify"
 import { Trip } from "@/domain/trip/entities/Trip"
+import { Expense } from "../entities/Expense"
 
+type ExpenseFormMode = 'create' | 'edit'
 interface CreateExpenseModalProps {
   trip: Trip;
+  mode: ExpenseFormMode;
 }
 
-export function CreateExpenseModalForm({ trip }: CreateExpenseModalProps) {
+export function CreateExpenseModalForm({ trip, mode }: CreateExpenseModalProps) {
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   const { createExpense } = useCreateExpense(trip.id)
+  const tripExpenses = trip.expenses || []
+  console.log(tripExpenses)
 
   const memberOptions = trip.members.map(member => ({
     value: member.userId,

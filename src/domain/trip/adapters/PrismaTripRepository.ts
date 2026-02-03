@@ -117,7 +117,8 @@ export class PrismaTripRepository implements TripRepository {
                 id: true,
                 name: true
               }
-            }
+            },
+            participants: true
           }
         }
       },
@@ -151,6 +152,11 @@ export class PrismaTripRepository implements TripRepository {
         createdAt: expense.createdAt,
         date: expense.date,
         paidById: expense.paidById,
+        participants: expense.participants.map(participant => ({
+          id: participant.id,
+          expenseId: participant.expenseId,
+          userId: participant.userId
+        })),
       })),
     }
   }

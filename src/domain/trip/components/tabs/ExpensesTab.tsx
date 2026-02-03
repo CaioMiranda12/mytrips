@@ -41,7 +41,7 @@ export function ExpensesTab({ trip, members, expenses }: TripTabProps) {
       </div>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <CreateExpenseModalForm trip={trip} />
+        <CreateExpenseModalForm trip={trip} mode="create" />
 
         <div className="space-y-3">
           {expenses.map((expense) => (

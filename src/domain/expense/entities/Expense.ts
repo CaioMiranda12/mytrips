@@ -13,4 +13,9 @@ export type Expense = {
     name: string;
   }
   createdAt: Date;
+  participants?: {
+    id: string;
+    expenseId: string;
+    userId: string;
+  }[]
 };

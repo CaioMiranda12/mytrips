@@ -1,3 +1,5 @@
+import { Expense } from "@/domain/expense/entities/Expense";
+
 export type TripRole = 'ADMIN' | 'MEMBER'
 
 export type TripMember = {
@@ -14,6 +16,7 @@ export type Trip = {
   startDate: Date;
   endDate: Date;
   ownerId: string;
-  members: TripMember[];
   createdAt: Date;
+  members: TripMember[];
+  expenses?: Expense[];
 }
